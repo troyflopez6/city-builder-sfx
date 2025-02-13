@@ -3,19 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+    --floor-dimension: 8rem;
+    --window-size: 2rem;
 }
+@layer components {
+    .house {
+        height: var(--floor-dimension);
+        width: var(--floor-dimension);
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: repeat(2, 1fr);
+        border: 3px solid black;
+        border-top: none;
+    }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+    .door {
+        grid-row: 2/3;
+        grid-column: 2/3;
+        place-self: center;
+        height: 4rem;
+        width: 3rem;
+        background-color: white;
+        border: 3px solid black;
+    }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+    .window {
+        height: var(--window-size);
+        width: var(--window-size);
+        background-color: white;
+        border: 2px solid black;
+        place-self: center;
+    }
+
+    .roof {
+        width: var(--floor-dimension); 
+        height: var(--floor-dimension);
+        border-left: 4rem solid transparent;
+        border-right: 4rem solid transparent;
+        border-bottom: 4rem solid black;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+    }
+
+    .roof-background{
+        width: var(--floor-dimension);
+        height: var(--floor-dimension);
+        border-left: 3.8rem solid transparent;
+        border-right: 3.8rem solid transparent;
+        border-bottom: 3.8rem solid white;
+    }
+
+    .floor {
+        height: var(--floor-dimension);
+        width: var(--floor-dimension);
+        border: 3px solid black;
+        border-bottom: none;
+        display: flex;
+        justify-content: space-around;
+    }
 }
