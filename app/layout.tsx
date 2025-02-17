@@ -1,4 +1,5 @@
 import Navbar from '@/components/Navbar/Navbar';
+import CityBuilderProvider from '@/contexts/CityBuilderContext';
 import type { Metadata } from 'next';
 import './globals.css';
 
@@ -14,8 +15,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navbar />
-        {children}
+        <div className='relative'>
+          <Navbar />
+          <CityBuilderProvider>
+            {children}
+          </CityBuilderProvider>
+          <div id='overlay'></div>
+        </div>
       </body>
     </html>
   );

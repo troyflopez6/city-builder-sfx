@@ -8,6 +8,7 @@ export type SelectWithLabelProps = SelectHTMLAttributes<HTMLSelectElement> & {
         label?: string
         optionProps: OptionHTMLAttributes<HTMLOptionElement>
     }[]
+    building_color?: string
 }
 
 const SelectWithLabel: FC<SelectWithLabelProps> = ({ label, labelProps, selectProps, options }) => {
@@ -27,6 +28,7 @@ const SelectWithLabel: FC<SelectWithLabelProps> = ({ label, labelProps, selectPr
             <option 
               key={`${i}_${option.label}`}
               className='font-bold'
+              {...option.optionProps}
             >
               {option.label}
             </option>)
