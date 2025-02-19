@@ -1,8 +1,11 @@
+'use client'
 import InputWithLabel from '@/components/UI/InputWithLabel/InputWithLabel'
 import SelectWithLabel from '@/components/UI/SelectWithLabel/SelectWithLabel'
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
+import useCityForm from '@/hooks/useCityForm'
+import { createBuilding, deleteBuilding } from '@/redux/features/building/slice'
 import { Building } from '@/types/building.type'
-import { FC, useContext } from 'react'
+import { FC, FormEvent, memo } from 'react'
+import { useDispatch } from 'react-redux'
 
 const options = [
   {
@@ -31,27 +34,33 @@ const options = [
   }]
 interface CityFormProps {
   isCreateNewCity?: boolean
-  building_id?: string
   building?: Building
 }
 
-const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building }) => {
-  const { changeFloor, changeColor, floors, color, createNewBuilding, changeHouseName, deleteBuilding } = useContext(CityBuilderContext)
+const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building }) => {
+  const dispatch = useDispatch()
+  const { buildingFormData, onFormDataChange } = useCityForm({ building })
+  const { color, floors } = buildingFormData
+  const addBuilding = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    dispatch(createBuilding(buildingFormData))
+  }
 
   return (
-    <form className='flex flex-col gap-2 px-4 py-2 border-b-[1px]' onSubmit={(e) => createNewBuilding(e, building_id)}>
+    <form className='flex flex-col gap-2 px-4 py-2 border-b-[1px]' onSubmit={addBuilding}>
       <div className={`flex ${isCreateNewCity ? 'gap-2' : 'justify-between'} items-center`}> 
         {
           isCreateNewCity && 
             <InputWithLabel 
               className='h-5 flex-1 p-1 border border-solid rounded'
-              name='house-name'
+              name='name'
               type='text'
+              autoComplete='additional-name'
               labelProps={{
-                htmlFor: 'house-name',
+                htmlFor: 'name',
               }}
               label='House name: '
-              onChange={changeHouseName}
+              onChange={(e) => onFormDataChange({ e, key: 'house_name' })}
               maxLength={15}
             />
         }
@@ -59,20 +68,22 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
           <>
             <InputWithLabel 
               className='h-5 w-full p-1 border border-solid rounded mr-5'
-              name='house-name'
+              name='name'
               type='text'
+              autoComplete='additional-name'
               labelProps={{
-                htmlFor: 'house-name',
+                htmlFor: 'name',
                 className: 'text-nowrap',
               }}
               label={'Name: '}
               value={building.house_name}
-              onChange={(e) => changeHouseName(e, building)}
+              onChange={(e) => onFormDataChange({ e, key: 'house_name' })}
               maxLength={15}
             />
             <button 
               className='border border-red-400 rounded px-2 hover:bg-red-500 hover:text-white hover:border-slate-500'
-              onClick={() => deleteBuilding(building.building_id)}
+              onClick={() => dispatch(deleteBuilding(building.building_id))}
+              type='button'
             >
                 Delete
             </button>
@@ -93,7 +104,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
               }}
               label='Floors: '
               value={isCreateNewCity ?  floors : building?.floors}
-              onChange={(e) => changeFloor(e, building)}
+              onChange={(e) => onFormDataChange({ e, key: 'floors' })}
             />
           </div>
           <div className='flex'>
@@ -104,9 +115,8 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
               }}
               selectProps={{
                 name:'color',
-                id: 'color',
                 className:'border border-solid font-bold rounded',
-                onChange: (e) => changeColor(e, building),
+                onChange: (e) => onFormDataChange({ e, key: 'color' }),
                 value: building ? building?.color : color,
               }}
               options={options}
@@ -117,7 +127,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
             className='block accent-slate-500'
             name='floors'
             type="range"
-            onChange={(e) => changeFloor(e, building)}
+            onChange={(e) => onFormDataChange({ e, key: 'floors' })}
             max={5} 
             min={1}
             value={building ? building?.floors : floors}
@@ -128,7 +138,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
               className='border bg-blue-600 rounded p-1 text-white hover:bg-blue-400'
               type='submit'
             >
-              Add buiding
+              Add building
             </button>
           }
         </div>
@@ -137,4 +147,4 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
     </form>
   )}
 
-export default CityForm
+export default memo(CityForm)

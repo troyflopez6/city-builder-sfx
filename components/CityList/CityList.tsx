@@ -1,17 +1,22 @@
 'use client'
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
-import { FC, useContext } from 'react'
+import { buildingListSelector } from '@/redux/features/building/selector'
+import { FC, memo } from 'react'
+import { useSelector } from 'react-redux'
 import City from './components/City/City'
 
 const CityList: FC = () => {
-  const { buildingList } = useContext(CityBuilderContext)
+  const buildingList = useSelector(buildingListSelector)
+  
   return (
     <div className='w-full h-full flex gap-4 border rounded overflow-x-auto'>
       {
-        buildingList.map((building, i) => (
+        buildingList?.map(({ building_id, color, floors, house_name }, i) => (
           <City
-            key={`${i}_${building.building_id}` }
-            building={building}
+            key={`${i}_${building_id}` }
+            building_id={building_id}
+            color={color}
+            floors={floors}
+            house_name={house_name}
           />
 
         ))
@@ -19,4 +24,4 @@ const CityList: FC = () => {
     </div>
   )}
 
-export default CityList
+export default memo(CityList)
