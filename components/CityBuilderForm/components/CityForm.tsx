@@ -1,8 +1,9 @@
+/* eslint-disable no-unused-vars */
 import InputWithLabel from '@/components/UI/InputWithLabel/InputWithLabel'
 import SelectWithLabel from '@/components/UI/SelectWithLabel/SelectWithLabel'
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
+import useCityForm, { BuildingWithoutId } from '@/hooks/useCityForm'
 import { Building } from '@/types/building.type'
-import { FC, useContext } from 'react'
+import { FC, FormEvent } from 'react'
 
 const options = [
   {
@@ -31,15 +32,17 @@ const options = [
   }]
 interface CityFormProps {
   isCreateNewCity?: boolean
-  building_id?: string
   building?: Building
+  deleteBuilding?: (_building_id: string) => void
+  addBuilding?:  ({ e, building }: {e: FormEvent<HTMLFormElement>, building: BuildingWithoutId}) => void
+  updateBuilding?: (building: Building) => void
 }
 
-const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building }) => {
-  const { changeFloor, changeColor, floors, color, createNewBuilding, changeHouseName, deleteBuilding } = useContext(CityBuilderContext)
-
+const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building, deleteBuilding, addBuilding, updateBuilding }) => {
+  const { buildingFormData, onFormDataChange } = useCityForm({ building, updateBuilding })
+  const { color, floors } = buildingFormData
   return (
-    <form className='flex flex-col gap-2 px-4 py-2 border-b-[1px]' onSubmit={(e) => createNewBuilding(e, building_id)}>
+    <form className='flex flex-col gap-2 px-4 py-2 border-b-[1px]' onSubmit={(e) => addBuilding?.({ e, building: buildingFormData })}>
       <div className={`flex ${isCreateNewCity ? 'gap-2' : 'justify-between'} items-center`}> 
         {
           isCreateNewCity && 
@@ -51,8 +54,9 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
                 htmlFor: 'house-name',
               }}
               label='House name: '
-              onChange={changeHouseName}
+              onChange={(e) => onFormDataChange({ e, key: 'house_name' })}
               maxLength={15}
+              placeholder='House 1'
             />
         }
         {  !isCreateNewCity && building &&
@@ -67,12 +71,13 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
               }}
               label={'Name: '}
               value={building.house_name}
-              onChange={(e) => changeHouseName(e, building)}
+              onChange={(e) => onFormDataChange({ e, key: 'house_name' })}
               maxLength={15}
             />
             <button 
               className='border border-red-400 rounded px-2 hover:bg-red-500 hover:text-white hover:border-slate-500'
-              onClick={() => deleteBuilding(building.building_id)}
+              onClick={() => deleteBuilding?.(building.building_id)}
+              type='button'
             >
                 Delete
             </button>
@@ -93,7 +98,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
               }}
               label='Floors: '
               value={isCreateNewCity ?  floors : building?.floors}
-              onChange={(e) => changeFloor(e, building)}
+              onChange={(e) => onFormDataChange({ e, key: 'floors' })}
             />
           </div>
           <div className='flex'>
@@ -106,7 +111,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
                 name:'color',
                 id: 'color',
                 className:'border border-solid font-bold rounded',
-                onChange: (e) => changeColor(e, building),
+                onChange: (e) => onFormDataChange({ e, key: 'color' }),
                 value: building ? building?.color : color,
               }}
               options={options}
@@ -117,7 +122,7 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building_id, building })
             className='block accent-slate-500'
             name='floors'
             type="range"
-            onChange={(e) => changeFloor(e, building)}
+            onChange={(e) => onFormDataChange({ e, key: 'floors' })}
             max={5} 
             min={1}
             value={building ? building?.floors : floors}

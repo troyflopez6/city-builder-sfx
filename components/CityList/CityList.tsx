@@ -1,10 +1,14 @@
 'use client'
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
-import { FC, useContext } from 'react'
+import { Building } from '@/types/building.type'
+import { FC, memo } from 'react'
 import City from './components/City/City'
 
-const CityList: FC = () => {
-  const { buildingList } = useContext(CityBuilderContext)
+interface CityListProps {
+  buildingList: Building[]
+  duplicateBuilding:(_building: Building) => void
+}
+
+const CityList: FC<CityListProps> = ({ buildingList, duplicateBuilding }) => {
   return (
     <div className='w-full h-full flex gap-4 border rounded overflow-x-auto'>
       {
@@ -12,6 +16,7 @@ const CityList: FC = () => {
           <City
             key={`${i}_${building.building_id}` }
             building={building}
+            duplicateBuilding={duplicateBuilding}
           />
 
         ))
@@ -19,4 +24,4 @@ const CityList: FC = () => {
     </div>
   )}
 
-export default CityList
+export default memo(CityList)

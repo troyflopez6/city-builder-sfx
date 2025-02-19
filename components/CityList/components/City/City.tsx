@@ -1,13 +1,12 @@
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
 import { Building } from '@/types/building.type'
-import { CSSProperties, FC, useContext } from 'react'
+import { CSSProperties, FC, memo } from 'react'
 
 interface CityProps {
   building: Building
+  duplicateBuilding:(_building: Building) => void
 }
 
-const City: FC<CityProps> = ({ building }) => {
-  const { duplicateBuilding } = useContext(CityBuilderContext)
+const City: FC<CityProps> = ({ building, duplicateBuilding }) => {
   const { color, floors, house_name } = building
   const middleFloors = floors - 1
   const styling: CSSProperties = {
@@ -48,4 +47,4 @@ const City: FC<CityProps> = ({ building }) => {
     </div>
   )}
 
-export default City
+export default memo(City)

@@ -1,4 +1,4 @@
-import { FC, InputHTMLAttributes, LabelHTMLAttributes } from 'react'
+import { FC, InputHTMLAttributes, LabelHTMLAttributes, memo } from 'react'
 
 type InputProps = InputHTMLAttributes<HTMLInputElement> & {
     labelProps?: LabelHTMLAttributes<HTMLLabelElement>
@@ -20,4 +20,4 @@ const InputWithLabel: FC<InputProps> = ({ label, labelProps, ...inputProps }) =>
     </>
   )}
 
-export default InputWithLabel
+export default memo(InputWithLabel)
