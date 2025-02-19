@@ -1,51 +1,49 @@
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
+import { duplicateBuilding } from '@/redux/features/building/slice'
 import { Building } from '@/types/building.type'
-import { CSSProperties, FC, useContext } from 'react'
+import { FC, memo, useMemo } from 'react'
+import { useDispatch } from 'react-redux'
+import Floor from './components/Floor'
+import House from './components/House'
+import HouseName from './components/HouseName'
+import Roof from './components/Roof'
 
-interface CityProps {
-  building: Building
-}
+type CityProps = Building
 
-const City: FC<CityProps> = ({ building }) => {
-  const { duplicateBuilding } = useContext(CityBuilderContext)
-  const { color, floors, house_name } = building
-  const middleFloors = floors - 1
-  const styling: CSSProperties = {
-    backgroundColor: color,
-  }
+const City: FC<CityProps> = ({ color, floors, house_name, building_id }) => {
+  const dispatch = useDispatch()
+  const middleFloors = useMemo(() => floors - 1, [floors])
+
+  const duplicate = () => dispatch(duplicateBuilding(building_id))
 
   return (
     <div className='rounded flex flex-col justify-end px-10 py-5 h-full'>
-      <div className="roof">
-        <div className="roof-background">
-        </div>
-      </div>
+      <Roof />
       {
         Array.from(Array(middleFloors), (_,i) => {
           const isLastFloor = i === 0
           return ( 
-            <div className={`floor ${isLastFloor ? 'border-y-2' : 'border-y-0'}`} style={styling} key={i}>
-              <div className='window'></div>
-              <div className='window'></div>
-            </div>
+            <Floor 
+              key={i}
+              isLastFloor={isLastFloor}
+              color={color}
+            />
           )
         })
       }
-      <div className={`house ${floors === 1 ? 'border-t-2' : 'border-t-0'}`} style={styling}>
-        <div className='door'>
-        </div>
-        <div className='window'></div>
-      </div>
-      <div className='text-lg font-bold text-center capitalize text-wrap min-h-7'>
-        {house_name}
-      </div>
+      <House 
+        color={color} 
+        floors={floors}
+      />
+      <HouseName
+        house_name={house_name}
+      />
       <button 
         className='rounded border-slate-500 p-1 cursor-pointer border bg-blue-400 flex items-center gap-4 font-bold text-white hover:bg-blue-300 justify-center'
-        onClick={() => duplicateBuilding(building)}
+        onClick={duplicate}
       >
         Duplicate
       </button>
     </div>
   )}
 
-export default City
+export default memo(City)

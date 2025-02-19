@@ -1,24 +1,29 @@
 'use client'
-import { CityBuilderContext } from '@/contexts/CityBuilderContext'
-import { FC, useContext } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { isOpenModalSelector } from '@/redux/features/building/selector'
+import { setOpenModal } from '@/redux/features/building/slice'
+import { FC } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import CityBuilderForm from '../CityBuilderForm/CityBuilderForm'
 
 interface CreateBuildingModalProps {
 }
 
 const CreateBuildingModalContent: FC<CreateBuildingModalProps> = () => {
-  const { openModal, setOpenModal } = useContext(CityBuilderContext)
+  const dispatch = useDispatch()
+  const isOpenModal = useSelector(isOpenModalSelector)
 
   return (
     <>
       {
-        openModal && 
+        isOpenModal && 
         <div className='absolute size-full top-0  flex items-center justify-center'>
-          <div className='absolute size-full top-0 bg-black bg-opacity-80' onClick={() => setOpenModal(false)}>
+          <div className='absolute size-full top-0 bg-black bg-opacity-80' onClick={() => dispatch(setOpenModal(false))}>
           </div>
           <div className='bg-white rounded z-10'>
-            <CityBuilderForm building_id={uuidv4()} isCreateNewCity={true} label='Create new house'  />
+            <CityBuilderForm 
+              isCreateNewCity={true} 
+              label='Create new house'
+            />
           </div>
         </div>
       }

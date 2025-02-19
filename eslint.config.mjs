@@ -11,8 +11,7 @@ const eslintConfig = [
     rules: {
       semi: 'off',
       quotes: ['error', 'single'],
-      'no-unused-vars': 'error',
-      'prefer-const': 'error',
+      'no-unused-vars': ['error', { 'argsIgnorePattern': '^_' }],      'prefer-const': 'error',
       'no-var': 'error',
       'comma-dangle': ['error', 'always-multiline'],
       'no-console': 'warn',
