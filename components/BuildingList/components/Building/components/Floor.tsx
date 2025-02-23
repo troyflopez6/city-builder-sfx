@@ -1,12 +1,12 @@
-import { Building } from '@/types/building.type'
-import { CSSProperties, FC, memo } from 'react'
+import { TBuilding } from '@/types/building.type'
+import { CSSProperties, FC } from 'react'
 
-interface FloorProps {
+type TFloorProps = {
   isLastFloor: boolean
-  color: Building['color']
+  color: TBuilding['color']
 }
 
-const Floor: FC<FloorProps> = ({ color, isLastFloor }) => {
+const Floor: FC<TFloorProps> = ({ color, isLastFloor }) => {
   const styling: CSSProperties = {
     backgroundColor: color,
   }
@@ -21,4 +21,4 @@ const Floor: FC<FloorProps> = ({ color, isLastFloor }) => {
     </>
   )}
 
-export default memo(Floor)
+export default Floor

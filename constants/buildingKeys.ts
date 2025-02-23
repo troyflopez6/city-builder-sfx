@@ -1,1 +1,1 @@
-export const CITY_BUILDER = 'CITY_BUILDER'
+export const BUILDING_BUILDER = 'BUILDING_BUILDER'

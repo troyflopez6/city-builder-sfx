@@ -1,21 +1,21 @@
-import { BuildingWithoutId } from '@/hooks/useCityForm';
-import { Building } from '@/types/building.type';
+import { TBuildingWithoutId } from '@/hooks/useBuildingForm';
+import { TBuilding } from '@/types/building.type';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { ValueOf } from 'next/dist/shared/lib/constants';
 import { v4 as uuidv4 } from 'uuid';
 
 export type PersistedData = {
-  cityBuilder: CityBuilderState
+  buildingBuilder: TBuildingBuilderState
 }
 
-export type CityBuilderState = {
-    buildingList: Building[]
+export type TBuildingBuilderState = {
+    buildingList: Record<TBuilding['building_id'], TBuilding>
     openModal: boolean
 }
 
-const initialState: CityBuilderState = 
+const initialState: TBuildingBuilderState = 
     {
-      buildingList: [],
+      buildingList: {},
       openModal: false,
     }
 
@@ -23,47 +23,46 @@ const buildingSlice = createSlice({
   name: 'buildingSlice',
   initialState,
   reducers: {
-    setBuilding: (state, action: PayloadAction<Building[]>) => {
+    setBuilding: (state, action: PayloadAction<TBuildingBuilderState['buildingList']>) => {
       state.buildingList = action.payload
     },
-    createBuilding: (state, action: PayloadAction<BuildingWithoutId>) => {
+    createBuilding: (state, action: PayloadAction<TBuildingWithoutId>) => {
       const { buildingList } = state
-      const  { payload } = action
-      state.buildingList = [...buildingList, { ...payload, building_id: uuidv4() }]
+      const randomId = uuidv4().replace(/-/g, '')      
+      state.buildingList = {
+        ...buildingList,
+        [randomId]: {
+          ...action.payload,
+          building_id: randomId,
+        },
+      }
+
       state.openModal = false
     },
-    deleteBuilding: (state, action:PayloadAction<Building['building_id']>) => {
-      const { buildingList } = state
-      const { payload } = action
-      const updatedBuildingList = buildingList.filter((building) => building.building_id !== payload)
-      state.buildingList = updatedBuildingList
+    deleteBuilding: (state, action:PayloadAction<TBuilding['building_id']>) => {
+      delete state.buildingList[action.payload]
     },
-    updateBuilding: (state, action:PayloadAction<{key: keyof Building , value: ValueOf<Building>, building: Building }>) => {
-      const { buildingList } = state
+    updateBuilding: (state, action:PayloadAction<{key: keyof TBuilding , value: ValueOf<TBuilding>, building: TBuilding }>) => {
       const { building, key, value } = action.payload
+      const { building_id } = building
+      const isUpdatingFloors = key === 'floors'
 
-      const updatedBuilding = buildingList.map((b) => {
-        if(b.building_id === building.building_id){
-          return {
-            ...b,
-            [key]: value,
-          }
-        }
-        return b
-      })
-      state.buildingList = updatedBuilding
+      state.buildingList[building_id] = {
+        ...state.buildingList[building_id],
+        [key]:  isUpdatingFloors ? Number(value) : value,
+      }
     },
-    duplicateBuilding: (state, action:PayloadAction<Building['building_id']>) => {
+    duplicateBuilding: (state, action:PayloadAction<TBuilding['building_id']>) => {
       const { buildingList } = state
       const { payload } = action
-      const buildingToDuplicate = buildingList.find((building) => building.building_id === payload)
+      const buildingToDuplicate = buildingList[payload]
       if(buildingToDuplicate) {
-        const duplicateNewId = uuidv4()
+        const duplicateNewId = uuidv4().replace(/-/g, '')
         const newDuplicateBuilding = {
           ...buildingToDuplicate,
           building_id: duplicateNewId,
         }
-        state.buildingList = [...buildingList, newDuplicateBuilding]
+        state.buildingList[duplicateNewId] = newDuplicateBuilding
       }
     },
     setOpenModal: (state, action:PayloadAction<boolean>) => {

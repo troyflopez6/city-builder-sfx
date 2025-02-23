@@ -3,7 +3,7 @@ import { isOpenModalSelector } from '@/redux/features/building/selector'
 import { setOpenModal } from '@/redux/features/building/slice'
 import { FC } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import CityBuilderForm from '../CityBuilderForm/CityBuilderForm'
+import BuildingBuilderForm from '../BuildingBuilderForm/BuildingBuilderForm'
 
 interface CreateBuildingModalProps {
 }
@@ -20,7 +20,7 @@ const CreateBuildingModalContent: FC<CreateBuildingModalProps> = () => {
           <div className='absolute size-full top-0 bg-black bg-opacity-80' onClick={() => dispatch(setOpenModal(false))}>
           </div>
           <div className='bg-white rounded z-10'>
-            <CityBuilderForm 
+            <BuildingBuilderForm 
               isCreateNewCity={true} 
               label='Create new house'
             />

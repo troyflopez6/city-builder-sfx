@@ -3,15 +3,15 @@ import { setOpenModal } from '@/redux/features/building/slice'
 import { FC } from 'react'
 import { useDispatch } from 'react-redux'
 import { HomeIcon } from '../Icons/Icons'
-import CityForm from './components/CityForm'
-import CityFormList from './components/CityFormList'
+import BuildingForm from './components/BuildingForm'
+import BuildingFormList from './components/BuildingFormList'
 
-interface CityBuilderFormProps {
+type TBuildingBuilderFormProps = {
   label?: string
   isCreateNewCity?: boolean
 }
 
-const CityBuilderForm: FC<CityBuilderFormProps> = ({ isCreateNewCity, label= 'Houses List' }) => {
+const BuildingBuilderForm: FC<TBuildingBuilderFormProps> = ({ isCreateNewCity, label= 'Houses List' }) => {
   const dispatch = useDispatch()
 
   return (
@@ -27,12 +27,12 @@ const CityBuilderForm: FC<CityBuilderFormProps> = ({ isCreateNewCity, label= 'Ho
           </button>
         }
       </div>
-      <CityFormList
+      <BuildingFormList
         isCreateNewCity={isCreateNewCity}
       />
       {
         isCreateNewCity &&
-          <CityForm
+          <BuildingForm
             isCreateNewCity={isCreateNewCity}
           />
       }
@@ -48,4 +48,4 @@ const CityBuilderForm: FC<CityBuilderFormProps> = ({ isCreateNewCity, label= 'Ho
     </div>
   )}
 
-export default CityBuilderForm
+export default BuildingBuilderForm

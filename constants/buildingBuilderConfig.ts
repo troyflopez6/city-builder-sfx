@@ -1,6 +1,6 @@
-import { CityBuilderConfig } from '@/types/cityBuilderConfiguration.type';
+import { TBuildingBuilderConfig } from '@/types/buildingBuilderConfiguration.type';
 
-export const cityBuilderConfig: CityBuilderConfig = {
+export const buildingBuilderConfig: TBuildingBuilderConfig = {
   maxFloor: 6,
   availableColors: [
     {

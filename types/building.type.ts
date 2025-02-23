@@ -1,4 +1,4 @@
-export type Building = {
+export type TBuilding = {
     building_id: string
     color: string
     floors: number

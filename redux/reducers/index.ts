@@ -1,12 +1,12 @@
 import { combineReducers } from '@reduxjs/toolkit'
-import building, { CityBuilderState } from '../features/building/slice'
+import building, { TBuildingBuilderState } from '../features/building/slice'
 
 export type RootReducerState = {
-  cityBuilder: CityBuilderState
+  buildingBuilder: TBuildingBuilderState
 }
 
 const reducers = {
-  cityBuilder:building,
+  buildingBuilder:building,
 }
 
 export const rootReducer = combineReducers(reducers)

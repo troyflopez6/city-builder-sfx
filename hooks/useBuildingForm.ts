@@ -1,25 +1,25 @@
 import { updateBuilding } from '@/redux/features/building/slice'
-import { Building } from '@/types/building.type'
+import { TBuilding } from '@/types/building.type'
 import { ChangeEvent, useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
-export type BuildingWithoutId = Omit<Building, 'building_id'>
+export type TBuildingWithoutId = Omit<TBuilding, 'building_id'>
 
-interface UseCityFormProps { 
-    building?: Building
+interface TUseBuildingFormProps { 
+    building?: TBuilding
 }
 
-const defaultValues:BuildingWithoutId = {
+const defaultValues:TBuildingWithoutId = {
   floors: 1,
   color: '#FFA500',
   house_name: '',
 }
 
-const useCityForm = ({ building }: UseCityFormProps) => {
-  const [buildingFormData, setBuildingFormData] = useState<BuildingWithoutId>(building || defaultValues)
+const useBuildingForm = ({ building }: TUseBuildingFormProps) => {
+  const [buildingFormData, setBuildingFormData] = useState<TBuildingWithoutId>(building || defaultValues)
   const dispatch = useDispatch()
 
-  const onFormDataChange = useCallback(({ key,  e }: {key: keyof BuildingWithoutId, e:ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>} ) => {
+  const onFormDataChange = useCallback(({ key,  e }: {key: keyof TBuildingWithoutId, e:ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLSelectElement>} ) => {
     const { value } = e.target
 
     if(building) {
@@ -38,4 +38,4 @@ const useCityForm = ({ building }: UseCityFormProps) => {
   }
 }
 
-export default useCityForm
+export default useBuildingForm

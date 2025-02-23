@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC } from 'react'
 
 interface RoofProps {
 }
@@ -11,4 +11,4 @@ const Roof: FC<RoofProps> = () => {
     </div>
   )}
 
-export default  memo(Roof)
+export default Roof

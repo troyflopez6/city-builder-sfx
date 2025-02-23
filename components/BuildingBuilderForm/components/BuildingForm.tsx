@@ -1,43 +1,19 @@
 'use client'
 import InputWithLabel from '@/components/UI/InputWithLabel/InputWithLabel'
 import SelectWithLabel from '@/components/UI/SelectWithLabel/SelectWithLabel'
-import useCityForm from '@/hooks/useCityForm'
+import { options } from '@/constants/cityFormOptions'
+import useCityForm from '@/hooks/useBuildingForm'
 import { createBuilding, deleteBuilding } from '@/redux/features/building/slice'
-import { Building } from '@/types/building.type'
+import { TBuilding } from '@/types/building.type'
 import { FC, FormEvent, memo } from 'react'
 import { useDispatch } from 'react-redux'
 
-const options = [
-  {
-    optionProps: {
-      value:'#FFA500',
-    },
-    label: 'Orange',
-  },
-  {
-    optionProps: {
-      value:'#DB2D43',
-    },
-    label: 'Alizarin',
-  },
-  {
-    optionProps: {
-      value:'#171696',
-    },
-    label: 'Belize',
-  },
-  {
-    optionProps: {
-      value:'#50C878',
-    },
-    label: 'Emerald',
-  }]
-interface CityFormProps {
+type TBuildingFormProps = {
   isCreateNewCity?: boolean
-  building?: Building
+  building?: TBuilding
 }
 
-const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building }) => {
+const BuildingForm: FC<TBuildingFormProps> = ({ isCreateNewCity, building }) => {
   const dispatch = useDispatch()
   const { buildingFormData, onFormDataChange } = useCityForm({ building })
   const { color, floors } = buildingFormData
@@ -147,4 +123,4 @@ const CityForm: FC<CityFormProps> = ({ isCreateNewCity, building }) => {
     </form>
   )}
 
-export default memo(CityForm)
+export default memo(BuildingForm)

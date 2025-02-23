@@ -1,19 +1,19 @@
 import { duplicateBuilding } from '@/redux/features/building/slice'
-import { Building } from '@/types/building.type'
-import { FC, memo, useMemo } from 'react'
+import { TBuilding } from '@/types/building.type'
+import { FC, memo } from 'react'
 import { useDispatch } from 'react-redux'
 import Floor from './components/Floor'
 import House from './components/House'
 import HouseName from './components/HouseName'
 import Roof from './components/Roof'
 
-type CityProps = Building
+type TBuildingProps = TBuilding
 
-const City: FC<CityProps> = ({ color, floors, house_name, building_id }) => {
+const Building: FC<TBuildingProps> = ({ color, floors, house_name, building_id }) => {
   const dispatch = useDispatch()
-  const middleFloors = useMemo(() => floors - 1, [floors])
-
   const duplicate = () => dispatch(duplicateBuilding(building_id))
+  const middleFloors = floors - 1
+  const isOnlyOnelFloor = floors === 1
 
   return (
     <div className='rounded flex flex-col justify-end px-10 py-5 h-full'>
@@ -32,7 +32,7 @@ const City: FC<CityProps> = ({ color, floors, house_name, building_id }) => {
       }
       <House 
         color={color} 
-        floors={floors}
+        isOnlyOneFloor={isOnlyOnelFloor}
       />
       <HouseName
         house_name={house_name}
@@ -46,4 +46,4 @@ const City: FC<CityProps> = ({ color, floors, house_name, building_id }) => {
     </div>
   )}
 
-export default memo(City)
+export default memo(Building)

@@ -1,20 +1,22 @@
 'use client'
 import { buildingListSelector } from '@/redux/features/building/selector'
-import { FC, memo } from 'react'
+import { FC } from 'react'
 import { useSelector } from 'react-redux'
-import CityForm from './CityForm'
+import BuildingForm from './BuildingForm'
 
-interface CityFormListProps {
+interface BuildingFormListProps {
     isCreateNewCity?: boolean
 }
 
-const CityFormList: FC<CityFormListProps> = ({ isCreateNewCity }) => {
+const BuildingFormList: FC<BuildingFormListProps> = ({ isCreateNewCity }) => {
   const buildingList = useSelector(buildingListSelector)
+  const buildings = Object.entries(buildingList)
+
   return (
     <div className='h-full overflow-y-auto'>
-      {!isCreateNewCity && buildingList?.map((building) => (
-        <CityForm 
-          key={building.building_id} 
+      {!isCreateNewCity && buildings?.map(([building_id, building]) => (
+        <BuildingForm 
+          key={building_id} 
           isCreateNewCity={isCreateNewCity} 
           building={building}
         />
@@ -23,4 +25,4 @@ const CityFormList: FC<CityFormListProps> = ({ isCreateNewCity }) => {
     </div>
   )}
 
-export default memo(CityFormList)
+export default BuildingFormList

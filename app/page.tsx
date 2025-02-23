@@ -1,10 +1,10 @@
 
 'use client'
-import CityBuilderForm from '@/components/CityBuilderForm/CityBuilderForm';
-import CityList from '@/components/CityList/CityList';
+import BuildingBuilderForm from '@/components/BuildingBuilderForm/BuildingBuilderForm';
+import BuildingList from '@/components/BuildingList/BuildingList';
 import CreateBuildingModal from '@/components/CreateBuildingModal/CreateBuildingModal';
 import Modal from '@/components/Modal/Modal';
-import { CITY_BUILDER } from '@/constants/buildingKeys';
+import { BUILDING_BUILDER } from '@/constants/buildingKeys';
 import { PersistedData, setBuilding } from '@/redux/features/building/slice';
 import { getDataFromLocalStorage } from '@/utils/localstorageUtil';
 import { useEffect } from 'react';
@@ -15,9 +15,9 @@ const Home = () => {
 
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const data = getDataFromLocalStorage<PersistedData>(CITY_BUILDER)
-      if (data) {
-        const { buildingList } = data?.cityBuilder
+      const data = getDataFromLocalStorage<PersistedData>(BUILDING_BUILDER)
+      if (data && data?.buildingBuilder) {
+        const { buildingList } = data?.buildingBuilder
         dispatch(setBuilding(buildingList))
       }
     }
@@ -25,8 +25,8 @@ const Home = () => {
 
   return (
     <main className='p-3 flex gap-10 h-[calc(100vh-4rem)]'>
-      <CityBuilderForm />
-      <CityList />
+      <BuildingBuilderForm />
+      <BuildingList />
       <Modal
         selector='#overlay'
       >

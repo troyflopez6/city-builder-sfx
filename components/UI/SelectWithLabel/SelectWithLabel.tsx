@@ -1,6 +1,6 @@
 import { FC, LabelHTMLAttributes, OptionHTMLAttributes, SelectHTMLAttributes } from 'react'
 
-export type SelectWithLabelProps = SelectHTMLAttributes<HTMLSelectElement> & {
+export type TSelectWithLabelProps = SelectHTMLAttributes<HTMLSelectElement> & {
     labelProps?: LabelHTMLAttributes<HTMLLabelElement>
     selectProps?: SelectHTMLAttributes<HTMLSelectElement>
     label?: string
@@ -11,7 +11,7 @@ export type SelectWithLabelProps = SelectHTMLAttributes<HTMLSelectElement> & {
     building_color?: string
 }
 
-const SelectWithLabel: FC<SelectWithLabelProps> = ({ label, labelProps, selectProps, options }) => {
+const SelectWithLabel: FC<TSelectWithLabelProps> = ({ label, labelProps, selectProps, options }) => {
   return (
     <>
       {

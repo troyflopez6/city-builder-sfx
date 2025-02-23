@@ -1,8 +1,8 @@
-import { Building } from '@/types/building.type'
-import { FC, memo } from 'react'
+import { TBuilding } from '@/types/building.type'
+import { FC } from 'react'
 
 interface HouseNameProps {
-  house_name: Building['house_name']
+  house_name: TBuilding['house_name']
 }
 
 const HouseName: FC<HouseNameProps> = ({ house_name }) => {
@@ -12,4 +12,4 @@ const HouseName: FC<HouseNameProps> = ({ house_name }) => {
     </div>
   )}
 
-export default memo(HouseName)
+export default HouseName
